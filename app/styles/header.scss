@@ -1,0 +1,34 @@
+.header {
+  background-color: #00266b;
+  color: #fff;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .action-logged {
+    float: right;
+    list-style: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    li {
+      display: inline-block;
+      overflow: hidden;
+      color: #fff;
+      font-weight: 500;
+      transition: color 400ms ease 0s;
+      a {
+        outline: none;
+        font-size: 17px;
+        letter-spacing: .05em;
+        padding: 10px;
+        display: block;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+      &:hover, &.active {
+        color: #f0ad4e;
+      }
+    }
+  }
+}

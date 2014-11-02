@@ -30,8 +30,11 @@ module.exports = function (grunt) {
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       jade: {
-        files: ['<%= yeoman.app %>/views/*.jade'],
-        tasks: ['jade']
+        files: ['<%= yeoman.app %>/views/{,*/}*.jade'],
+        tasks: ['jade'],
+        options: {
+          livereload: '<%= connect.options.livereload %>'
+        }
       },
       bower: {
         files: ['bower.json'],
@@ -48,22 +51,15 @@ module.exports = function (grunt) {
         files: ['test/spec/{,*/}*.js'],
         tasks: ['newer:jshint:test', 'karma']
       },
-      compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server', 'autoprefixer']
-      },
       gruntfile: {
         files: ['Gruntfile.js']
       },
-      livereload: {
+      sass: {
+        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+        tasks: ['sass', 'cssmin'],
         options: {
           livereload: '<%= connect.options.livereload %>'
-        },
-        files: [
-          '<%= yeoman.app %>/{,*/}*.html',
-          '.tmp/styles/{,*/}*.css',
-          '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-        ]
+        }
       }
     },
 
@@ -73,19 +69,16 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
+        livereload: 35729,
+        base: appConfig.dist,
       },
       livereload: {
         options: {
           open: true,
           middleware: function (connect) {
             return [
-              connect.static('.tmp'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect.static(appConfig.app)
+              connect.static(appConfig.dist),
+              connect().use('/bower_components',connect.static('./bower_components'))
             ];
           }
         }
@@ -123,7 +116,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>/views',
-          dest: '<%= yeoman.dist %>',
+          dest: '<%= yeoman.dist %>/desktop',
           src: '*.jade',
           ext: '.html'
         }]
@@ -172,10 +165,6 @@ module.exports = function (grunt) {
 
     // Automatically inject Bower components into the app
     wiredep: {
-      app: {
-        src: ['<%= yeoman.app %>/index.html'],
-        ignorePath:  /\.\.\//
-      },
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         ignorePath: /(\.\.\/){1,2}bower_components\//
@@ -184,41 +173,30 @@ module.exports = function (grunt) {
 
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
-      options: {
-        sassDir: '<%= yeoman.app %>/styles',
-        cssDir: '.tmp/styles',
-        generatedImagesDir: '.tmp/images/generated',
-        imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/scripts',
-        fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: './bower_components',
-        httpImagesPath: '/images',
-        httpGeneratedImagesPath: '/images/generated',
-        httpFontsPath: '/styles/fonts',
-        relativeAssets: false,
-        assetCacheBuster: false,
-        raw: 'Sass::Script::Number.precision = 10\n'
-      },
-      dist: {
+      desktop: {
         options: {
-          generatedImagesDir: '<%= yeoman.dist %>/images/generated'
+          sassDir: '<%= yeoman.app %>/styles',
+          cssDir: '<%= yeoman.dist %>/desktop/styles'
         }
-      },
-      server: {
-        options: {
-          debugInfo: true
-        }
+      }
+    },
+
+    sass: {
+      desktop: {
+        files: [{
+          '<%= yeoman.dist %>/desktop/styles/main.css': '<%= yeoman.app %>/styles/all.scss'
+        }]
       }
     },
 
     // Renames files for browser caching purposes
     filerev: {
-      dist: {
+      desktop: {
         src: [
-          '<%= yeoman.dist %>/scripts/{,*/}*.js',
-          '<%= yeoman.dist %>/styles/{,*/}*.css',
-          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-          '<%= yeoman.dist %>/styles/fonts/*'
+          '<%= yeoman.dist %>/desktop/scripts/{,*/}*.js',
+          '<%= yeoman.dist %>/desktop/styles/{,*/}*.css',
+          '<%= yeoman.dist %>/desktop/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= yeoman.dist %>/desktop/styles/fonts/*'
         ]
       }
     },
@@ -227,55 +205,79 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
-      options: {
-        dest: '<%= yeoman.dist %>',
-        flow: {
-          html: {
-            steps: {
-              js: ['concat', 'uglifyjs'],
-              css: ['cssmin']
-            },
-            post: {}
-          }
-        }
-      }
+      html: '<%= yeoman.app %>/views/{,*/}*.jade'
+      // options: {
+      //   dest: '<%= yeoman.dist %>',
+      //   flow: {
+      //     html: {
+      //       steps: {
+      //         js: ['concat', 'uglifyjs'],
+      //         css: ['cssmin']
+      //       },
+      //       post: {}
+      //     }
+      //   }
+      // }
     },
 
     // Performs rewrites based on filerev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
-      css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
-      options: {
-        assetsDirs: ['<%= yeoman.dist %>','<%= yeoman.dist %>/images']
-      }
+      html: ['<%= yeoman.dist %>/desktop/{,*/}*.html'],
+      css: ['<%= yeoman.dist %>/desktop/styles/{,*/}*.css']
     },
 
     // The following *-min tasks will produce minified files in the dist folder
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
+    cssmin: {
+      dist: {
+        files: {
+          '<%= yeoman.dist %>/desktop/styles/main.css': [
+            '<%= yeoman.dist %>/desktop/styles/{,*/}*.css'
+          ]
+        }
+      }
+    },
+
+    uglify: {
+      desktop: {
+        files: {
+          '<%= yeoman.dist %>/desktop/scripts/main.js': [
+            '<%= yeoman.dist %>/desktop/scripts/main.js'
+          ],
+          '<%= yeoman.dist %>/desktop/scripts/vendor.js': [
+            '<%= yeoman.dist %>/desktop/scripts/vendor.js'
+          ]
+        }
+      }
+    },
+
+    concat: {
+      desktop: {
+        // src: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        // dest: '<%= yeoman.dist %>/desktop/scripts/main.js'
+        files: {
+          '<%= yeoman.dist %>/desktop/scripts/main.js': ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+          '<%= yeoman.dist %>/desktop/scripts/vendor.js': [
+            'bower_components/jquery/dist/jquery.js',
+            'bower_components/angular/angular.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/alert.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/button.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/carousel.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/collapse.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/dropdown.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tab.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/scrollspy.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js',
+            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js'
+          ]
+        }
+      }
+    },
 
     imagemin: {
       dist: {
@@ -339,49 +341,29 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
-      dist: {
+      desktop: {
         files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.app %>',
-          dest: '<%= yeoman.dist %>',
-          src: [
-            '*.{ico,png,txt}',
-            '.htaccess',
-            'images/{,*/}*.{webp}',
-            'fonts/*'
-          ]
-        }, {
-          expand: true,
-          cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/images',
-          src: ['generated/*']
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>/assets/images/',
+            dest: '<%= yeoman.dist %>/desktop/images/',
+            src: ['**']
         }, {
           expand: true,
           cwd: '.',
-          src: 'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/*',
-          dest: '<%= yeoman.dist %>'
+          src: 'bower_components/**',
+          dest: '<%= yeoman.dist %>/desktop/'
         }]
-      },
-      styles: {
-        expand: true,
-        cwd: '<%= yeoman.app %>/styles',
-        dest: '.tmp/styles/',
-        src: '{,*/}*.css'
       }
     },
 
     // Run some tasks in parallel to speed up the build process
     concurrent: {
-      server: [
-        'compass:server'
-      ],
-      test: [
-        'compass'
-      ],
-      dist: [
-        'compass:dist',
+      desktop: [
+        'sass:desktop',
+        'cssmin',
         // 'imagemin',
+        'concat',
         'svgmin'
       ]
     },
@@ -427,19 +409,18 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean',
     'jade',
-    'wiredep',
+    // 'wiredep',
     'useminPrepare',
-    'concurrent:dist',
-    'autoprefixer',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
+    'concurrent',
+    // 'autoprefixer',
     'uglify',
-    'filerev',
+    'copy',
+    'htmlmin',
+    // 'ngAnnotate',
+    'cdnify',
     'usemin',
-    'htmlmin'
+    // 'filerev',
+    'cssmin'
   ]);
 
   grunt.registerTask('dev', [

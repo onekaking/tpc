@@ -1,0 +1,22 @@
+extends template/layouts
+
+block vars
+  - title = 'Đăng nhập | TPC'
+//- Begin header
+block header
+  include includes/header
+//- End header
+block container
+  .container.content
+    form(action="#", method="POST", role="form")
+      .form-group
+        label(for="inputUser") Tên nhân viên
+        input.form-control#inputUser(type="text", placeholder="Nhập tên nhân viên", autofocus)
+      .form-group
+        label(for="inputPass") Mật khẩu
+        input.form-control#inputPass(type="password", placeholder="Nhập mật khẩu")
+      .checkbox
+        label
+          input(type="checkbox") 
+          | Lưu trạng thái đăng nhập
+      button.btn.btn-default(type="submit") Đăng nhập
