@@ -33,7 +33,7 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/views/{,*/}*.jade'],
         tasks: ['jade'],
         options: {
-          livereload: '<%= connect.options.livereload %>'
+          livereload: '<%= connect.all.options.livereload %>'
         }
       },
       bower: {
@@ -44,7 +44,7 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
         options: {
-          livereload: '<%= connect.options.livereload %>'
+          livereload: '<%= connect.all.options.livereload %>'
         }
       },
       jsTest: {
@@ -58,51 +58,53 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['sass', 'cssmin'],
         options: {
-          livereload: '<%= connect.options.livereload %>'
+          livereload: '<%= connect.all.options.livereload %>'
         }
       }
     },
 
     // The actual grunt server settings
     connect: {
-      options: {
-        port: 9000,
-        // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
-        livereload: 35729,
-        base: appConfig.dist,
-      },
-      livereload: {
+      all: {
         options: {
+          port: 9000,
           open: true,
-          middleware: function (connect) {
-            return [
-              connect.static(appConfig.dist),
-              connect().use('/bower_components',connect.static('./bower_components'))
-            ];
+          // Change this to '0.0.0.0' to access the server from outside.
+          hostname: 'localhost',
+          livereload: 35729,
+          base: appConfig.dist
+        },
+        livereload: {
+          options: {
+            middleware: function (connect) {
+              return [
+                connect.static(appConfig.dist),
+                connect().use('/bower_components', connect.static('./bower_components')),
+                connect.static(appConfig.app)
+              ];
+            }
           }
         }
       },
-      test: {
+      desktop: {
         options: {
-          port: 9001,
-          middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect.static('test'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect.static(appConfig.app)
-            ];
-          }
-        }
-      },
-      dist: {
-        options: {
+          port: 9000,
           open: true,
-          base: '<%= yeoman.dist %>'
+          // Change this to '0.0.0.0' to access the server from outside.
+          hostname: 'localhost',
+          livereload: 35729,
+          base: appConfig.dist + '/desktop'
+        },
+        livereload: {
+          options: {
+            middleware: function (connect) {
+              return [
+                connect.static(appConfig.dist + '/desktop'),
+                connect().use('/bower_components', connect.static('./bower_components')),
+                connect.static(appConfig.app)
+              ];
+            }
+          }
         }
       }
     },
@@ -425,7 +427,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('dev', [
     'build',
-    'connect:livereload',
+    'connect:all',
     'watch'
   ]);
 
