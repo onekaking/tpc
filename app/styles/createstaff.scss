@@ -1,0 +1,22 @@
+.create-staff-group {
+  background-color: #fff;
+  margin-top: 20px;
+  .inner {
+    padding: 20px;
+  }
+}
+
+.table-staff {
+  .delete-block {
+    .glyphicon {
+      color: #a94442;
+      margin-right: 5px;
+    }
+  }
+  .update-block {
+    .glyphicon {
+      color: #3c763d;
+      margin-right: 5px;
+    }
+  }
+}

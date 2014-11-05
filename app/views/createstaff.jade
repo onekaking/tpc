@@ -1,0 +1,57 @@
+extends template/layouts
+
+block vars
+  - title = 'Tạo nhân viên mới | TPC'
+//- Begin header
+block header
+  include includes/header
+//- End header
+block container
+  .container.content
+    h1.main-heading 
+      span Tạo nhân viên mới
+    form(action="staff/create", method="POST")
+      .create-staff-group
+        .inner
+          fieldset.complete-fields
+            p Vui lòng nhập đầy đủ tất cả các trường có dấu (*)
+            .form-group.grid-row
+              .grid-col.one-half
+                .grid-inner
+                  label.label-1 Tên nhân viên*
+                  span.input-1
+                    input(type="text", placeholder="Nhập tên nhân viên", required, autofocus)
+              .grid-col.one-half
+                .grid-inner
+                  label.label-1 Ngày sinh
+                  span.input-1
+                    input(type="text", placeholder="Nhập ngày sinh")
+            .form-group.grid-row
+              .grid-col.one-half
+                .grid-inner
+                  label.label-1 Số CMND
+                  span.input-1
+                    input(type="text", placeholder="Nhập số CMND")
+              .grid-col.one-half
+                .grid-inner
+                  label.label-1 Ngày cấp
+                  span.input-1
+                    input(type="text", placeholder="Nhập ngày cấp CMND")
+            .form-group.grid-row  
+              .grid-col.one-half
+                .grid-inner
+                  label.label-1 Vị trí
+                  select.custom-select
+                    option(value="0") Thợ may
+                    option(value="1") Kỹ thuật
+                    option(value="2") Thợ ủi
+                    option(value="3") Thợ kiểm
+                    option(value="4") Thợ phụ
+                    option(value="5") Nhân viên văn phòng
+              .grid-col.one-half
+                .grid-inner
+                  label.label-1 Số điện thoại
+                  span.input-1
+                    input(type="text", placeholder="Nhập số điện thoại")
+      .form-group.btn-add-staff
+        button.btn.btn-primary(type="submit", name="addStaff", value="") Thêm nhân viên

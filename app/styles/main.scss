@@ -75,7 +75,7 @@ body {
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
-    max-width: 730px;
+    // max-width: 730px;
   }
   /* Remove the padding we set earlier */
   .header,
@@ -92,4 +92,11 @@ body {
   .jumbotron {
     border-bottom: 0;
   }
+}
+
+button, html input[type=button], input[type=reset], input[type=submit] {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
 }

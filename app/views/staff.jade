@@ -6,4 +6,25 @@ block vars
 block header
   include includes/header
 //- End header
+//- Begin Script
+block includeScript
+  script(type="text/javascript",src="scripts/staff.js")
+//- End Script
 block container
+  .container.content
+    h1.main-heading 
+      span Danh sách nhân viên
+    .filter-staff
+      form.row(action="#", method="POST")
+        .col-md-4.col-sm-4
+          span.input-1
+            input(type="text", placeholder="Tìm tên nhân viên")
+        .col-md-4.col-sm-4
+          select.custom-select
+            option(value="0") Quản lý
+            option(value="1") Nhân viên 
+        .col-md-4.col-sm-4
+          .custom-input
+            button.btn.btn-primary.btn-block(type="submit", name="filterStaff") Lọc kết quả
+    .main-inner
+      .table-staff

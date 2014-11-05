@@ -19,6 +19,13 @@
   "trailing": true,
   "smarttabs": true,
   "globals": {
-    "angular": false
+    "angular": false,
+    "jQuery": true,
+    "$": true,
+    "_": true,
+    "TPC": true,
+    "console": true,
+    "L10n": true,
+    "globalJson": true
   }
 }
