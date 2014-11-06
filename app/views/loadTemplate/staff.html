@@ -13,7 +13,7 @@
     <% _.each(data, function( staff ){ %>
       <tr>
         <td class="center"><%- staff.id %></td>
-        <td><%- staff.name %></td>
+        <td><a href="staff.html"><%- staff.name %></a></td>
         <td><%- staff.birthday %></td>
         <td><%- staff.position %></td>
         <td><a href="/<%- staff.id %>/delete" class="delete-block"><span class="glyphicon glyphicon-remove"></span><span>Xóa</span></a></td>

@@ -1,0 +1,26 @@
+.accordion-heading {
+  background-color: #4285f4;
+  background: -webkit-linear-gradient(top,#4387fd,#4683ea);
+  background: linear-gradient(top,#4387fd,#4683ea);
+  color: #fff;
+  .inner {
+    padding : 15px;
+    .glyphicon {
+      float:right;
+      cursor: pointer;
+    }
+  }
+}
+
+.accordion-content {
+  background-color: #fff;
+  color: #000;
+  border-bottom: 2px solid #d4d4d4;
+  .inner {
+    padding: 15px;
+  }
+}
+
+[data-accordion="true"] {
+  margin-bottom: 20px;
+}

@@ -1,17 +1,22 @@
-.header
+.header.navbar.navbar-default(role="navigation")
   .container
-    a(href="home.html")
-      span Logo
-    ul.action-logged
-      li
-        a(href="package.html")
-          span Đơn hàng
-      li
-        a(href="timekeeper.html")
-          span Chấm công
-      li
-        a(href="material.html")
-          span Nguyên phụ liệu
-      li
-        a(href="staff.html")
-          span Nhân viên
+    .navbar-header
+      button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target=".bs-navbar-collapse")
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href="#") TPC
+    .collapse.navbar-collapse.bs-navbar-collapse
+      ul.nav.navbar-nav.action-logged.navbar-right
+        li
+          a(href="package.html")
+            span Đơn hàng
+        li
+          a(href="timekeeper.html")
+            span Chấm công
+        li
+          a(href="material.html")
+            span Nguyên phụ liệu
+        li
+          a(href="liststaff.html")
+            span Nhân viên

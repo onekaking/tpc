@@ -42,7 +42,7 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-        tasks: ['newer:jshint:all'],
+        tasks: ['newer:jshint:all', 'concat'],
         options: {
           livereload: '<%= connect.all.options.livereload %>'
         }
@@ -70,7 +70,7 @@ module.exports = function (grunt) {
           port: 9000,
           open: true,
           // Change this to '0.0.0.0' to access the server from outside.
-          hostname: 'localhost',
+          hostname: '0.0.0.0',
           livereload: 35729,
           base: appConfig.dist
         },
@@ -91,7 +91,7 @@ module.exports = function (grunt) {
           port: 9000,
           open: true,
           // Change this to '0.0.0.0' to access the server from outside.
-          hostname: 'localhost',
+          hostname: '0.0.0.0',
           livereload: 35729,
           base: appConfig.dist + '/desktop'
         },
@@ -260,10 +260,10 @@ module.exports = function (grunt) {
         // src: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         // dest: '<%= yeoman.dist %>/desktop/scripts/main.js'
         files: {
-          '<%= yeoman.dist %>/desktop/scripts/main.js': ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+          '<%= yeoman.dist %>/desktop/scripts/main.js': ['<%= yeoman.app %>/scripts/*.js'],
           '<%= yeoman.dist %>/desktop/scripts/vendor.js': [
             'bower_components/jquery/dist/jquery.js',
-            'bower_components/angular/angular.js',
+            'bower_components/underscore/underscore.js',
             'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js',
             'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/alert.js',
             'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/button.js',
@@ -347,7 +347,7 @@ module.exports = function (grunt) {
         files: [{
             expand: true,
             dot: true,
-            cwd: '<%= yeoman.app %>/assets/images/',
+            cwd: '<%= yeoman.app %>/images/',
             dest: '<%= yeoman.dist %>/desktop/images/',
             src: ['**']
         }, {
@@ -355,6 +355,21 @@ module.exports = function (grunt) {
           cwd: '.',
           src: 'bower_components/**',
           dest: '<%= yeoman.dist %>/desktop/'
+        }, {
+          expand: true,
+          cwd: '<%= yeoman.app %>/',
+          src: 'favicon.ico',
+          dest: '<%= yeoman.dist %>/desktop/'
+        }, {
+          expand: true,
+          cwd: '<%= yeoman.app %>/scripts/module',
+          src: '**',
+          dest: '<%= yeoman.dist %>/desktop/scripts'
+        }, {
+          expand: true,
+          cwd: '<%= yeoman.app %>/views/loadTemplate',
+          src: '**',
+          dest: '<%= yeoman.dist %>/desktop/template'
         }]
       }
     },

@@ -26,6 +26,7 @@
     "TPC": true,
     "console": true,
     "L10n": true,
-    "globalJson": true
+    "globalJson": true,
+    "window": true
   }
 }

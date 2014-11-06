@@ -23,3 +23,15 @@ body {
     }
   }
 }
+
+.staff-info {
+  margin: 20px 0;
+  .staff-avatar {
+    background: #fff;
+    border: 1px solid #cecece;
+    min-height: 250px;
+    width: 200px;
+    margin: 0 auto;
+    margin-top: 25px;
+  }
+}
